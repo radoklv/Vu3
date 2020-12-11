@@ -15,7 +15,6 @@
             <h3>Goal</h3>
             <input type="text" v-model="inputValue" v-on:keyup.enter="addGoal">
             <button class="btn btn-primary" @click="addGoal">Add Goal</button>
-
             <h5>Goal List</h5>
             <div v-if="goals.length">
                 <ul class="goals">
