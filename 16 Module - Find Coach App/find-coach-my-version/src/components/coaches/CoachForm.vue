@@ -155,7 +155,15 @@ export default {
             return
         }
         
-        alert('form is valid')
+        const formData = {
+          firstName: this.firstName.val,
+          lastName: this.lastName.val,
+          areas: this.areas.val,
+          description: this.description.val,
+          hourlyRate: this.hourlyRate.val
+        }
+
+        this.$emit('formData', formData)
     }
   },
 };

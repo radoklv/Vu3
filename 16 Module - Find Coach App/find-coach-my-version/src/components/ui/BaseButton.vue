@@ -49,9 +49,11 @@ a {
   display: inline-block;
 }
 
+
 a:hover,
 a:active,
 button:hover,
+button:focus,
 button:active {
   background-color: #270041;
   border-color: #270041;

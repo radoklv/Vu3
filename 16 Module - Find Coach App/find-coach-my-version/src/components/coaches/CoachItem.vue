@@ -18,8 +18,8 @@
       </div>
 
       <div class="coach_action">
-        <base-button link to="/contact" mode="flat">Contact</base-button>
-        <base-button link :to="contactLink" mode="outline"
+        <base-button link :to="contactCoach" mode="flat">Contact</base-button>
+        <base-button link :to="coachDetails" mode="outline"
           >View Details</base-button
         >
       </div>
@@ -36,9 +36,13 @@ export default {
       return this.coach.firstName + " " + this.coach.lastName;
     },
 
-    contactLink() {
+    coachDetails() {
       return "/coaches/" + this.coach.id;
     },
+
+    contactCoach(){
+      return "/coaches/"+this.coach.id+'/contact'
+    }
   },
 };
 </script>
