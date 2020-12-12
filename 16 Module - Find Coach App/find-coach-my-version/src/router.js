@@ -4,7 +4,7 @@ import Coaches from "./pages/coaches/CoachesList";
 import Requests from "./pages/requests/Requests";
 import CoachDetails from "./pages/coaches/CoachDetails";
 import CoachRegistration from "./pages/coaches/CoachRegistration";
-import ContactCoach from "./pages/coaches/ContactCoach";
+import ContactCoach from "./pages/requests/ContactCoach";
 
 const router = createRouter({
   history: createWebHistory(),

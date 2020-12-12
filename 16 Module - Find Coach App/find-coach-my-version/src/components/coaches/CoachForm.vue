@@ -2,21 +2,21 @@
   <form @submit.prevent="addCoach">
     <div class="form-control" :class="{invalid: !firstName.isValid}">
       <label for="firstname">First Name</label>
-      <input type="text" id="firstname" v-model="firstName.val" @change="clearValidity('firstName')" />
+      <input type="text" id="firstname" v-model.trim="firstName.val" @change="clearValidity('firstName')" />
     </div>
 
     <div class="form-control" :class="{invalid: !lastName.isValid}">
       <label for="lastname">Last Name</label>
-      <input type="text" id="lastname" v-model="lastName.val"  @change="clearValidity('lastName')"/>
+      <input type="text" id="lastname" v-model.trim="lastName.val"  @change="clearValidity('lastName')"/>
     </div>
 
     <div class="form-group" :class="{invalid: !areas.isValid}">
-      <div class="form-control" >
+      <div class="form-control">
         <input
           type="checkbox"
           id="frontend"
           value="frontend"
-          v-model.trim="areas.val"
+          v-model="areas.val"
           @change="clearValidity('areas')"
         />
         <label for="frontend">Frontend</label>
@@ -27,7 +27,7 @@
           type="checkbox"
           id="backend"
           value="backend"
-          v-model.trim="areas.val"
+          v-model="areas.val"
           @change="clearValidity('areas')"
         />
         <label for="backend">Backend</label>
@@ -38,7 +38,7 @@
           type="checkbox"
           id="career"
           value="career"
-          v-model.trim="areas.val"
+          v-model="areas.val"
           @change="clearValidity('areas')"
         />
         <label for="career">Career</label>

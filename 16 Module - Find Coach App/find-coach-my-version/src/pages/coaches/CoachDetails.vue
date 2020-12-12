@@ -6,12 +6,16 @@
 
   <base-card>
     <h5>Iterested? Contact {{ fullName }} now!</h5>
-    <base-button link :to='coachLink'>Contact</base-button>
+    <base-button link :to="coachLink">Contact</base-button>
     <router-view></router-view>
   </base-card>
 
   <base-card>
-    <base-badge v-for="(area, index) in areas" :key="index" :area="area"></base-badge> 
+    <base-badge
+      v-for="(area, index) in areas"
+      :key="index"
+      :area="area"
+    ></base-badge>
     <p>{{ description }}</p>
   </base-card>
 </template>
@@ -32,31 +36,32 @@ export default {
     );
   },
 
-  computed:{
-    fullName(){
-      return this.selectedCoach.firstName + ' '+ this.selectedCoach.lastName
+  computed: {
+    fullName() {
+      return this.selectedCoach.firstName + " " + this.selectedCoach.lastName;
     },
 
-    rate(){
-      return  '$' + this.selectedCoach.hourlyRate + '/h'
+    rate() {
+      return "$" + this.selectedCoach.hourlyRate + "/h";
     },
 
-    areas(){
-      return this.selectedCoach.areas
+    areas() {
+      return this.selectedCoach.areas;
     },
 
-    description(){
-      return this.selectedCoach.description
-
+    description() {
+      return this.selectedCoach.description;
     },
 
-    coachLink(){
-      return '/coaches/'+ this.id +'/contact'
-    }
-  }
-
+    coachLink() {
+      return "/coaches/" + this.id + "/contact";
+    },
+  },
 };
 </script>
 
-<style >
+<style scoped>
+.base-card_body {
+  margin: 15px 0 0 0;
+}
 </style>

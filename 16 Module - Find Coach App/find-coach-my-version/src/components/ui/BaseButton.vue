@@ -76,7 +76,6 @@ button:active {
 .flat:active,
 .outline:hover,
 .outline:active {
-  background-color: #edd2ff;
   outline: none
 }
 </style>
