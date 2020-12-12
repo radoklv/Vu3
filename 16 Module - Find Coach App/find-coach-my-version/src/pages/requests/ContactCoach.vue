@@ -113,6 +113,7 @@ export default {
 
 .form-control label {
   display: block;
+  font-weight: 600;
 }
 
 .form-control textarea {

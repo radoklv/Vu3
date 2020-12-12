@@ -1,10 +1,10 @@
 <template>
   <base-card>
     <h2>Requests Page</h2>
-
-    <ul>
+    <h5 v-if="!haveRequests">There is No Requests!</h5>
+    <ul v-else>
       <li v-for="request in requests" :key="request.id">
-        {{ request.email }} {{ request.message }}
+       {{request.coachId}} {{ request.email }} {{ request.message }}
       </li>
     </ul>
   </base-card>
@@ -16,6 +16,10 @@ export default {
     requests() {
       return this.$store.getters["requests/getRequests"];
     },
+
+    haveRequests(){
+      return this.$store.getters["requests/haveRequests"]
+    }
   },
 };
 </script>
