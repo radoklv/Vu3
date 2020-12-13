@@ -1,8 +1,11 @@
 <template>
   <base-card>
+    <coaches-filter @updatedFilter="updateFilter"></coaches-filter>
+  </base-card>
+  <base-card>
     <div class="actions">
       <base-button mode="outline">Refresh</base-button>
-      <base-button  v-if="!isCoach" mode="outline" link to="/registration"
+      <base-button v-if="!isCoach" mode="outline" link to="/registration"
         >Register As Coach</base-button
       >
     </div>
@@ -19,24 +22,65 @@
 
 <script>
 import CoachItem from "../../components/coaches/CoachItem";
+import CoachesFilter from "../../components/coaches/CoachesFilter";
 export default {
   components: {
     CoachItem,
+    CoachesFilter,
+  },
+
+  data() {
+    return {
+      filter: {
+        frontend: true,
+        backend: true,
+        career: true,
+      },
+    };
+  },
+
+  created(){
+      this.loadCoaches()
+  },
+
+  methods:{
+    updateFilter(newFilter){
+      this.filter = newFilter
+    },
+
+    async loadCoaches(){
+      await this.$store.dispatch('coaches/fetchCoaches')
+    }
   },
 
   computed: {
     coaches() {
-      return this.$store.getters["coaches/getCoaches"];
+      // return this.$store.getters["coaches/getCoaches"];
+
+      return this.$store.getters['coaches/getCoaches'].filter(coach =>{
+        if(coach.areas.includes('frontend') && this.filter.frontend == true){
+          return true
+        }
+
+        if(coach.areas.includes('backend') && this.filter.backend == true){
+          return true
+        }
+
+        if(coach.areas.includes('career') && this.filter.career == true){
+          return true
+        }
+
+        return false
+      })
     },
 
-    hasCoaches(){
+    hasCoaches() {
       return this.$store.getters["coaches/hasCoaches"];
     },
 
-
-    isCoach(){
-      return this.$store.getters["coaches/isCoach"]
-    }
+    isCoach() {
+      return this.$store.getters["coaches/isCoach"];
+    },
   },
 };
 </script>

@@ -2,35 +2,7 @@ export default {
   namespaced: true,
   state() {
     return {
-      coaches: [
-        {
-          id: "c1",
-          firstName: "Radoslav",
-          lastName: "Kolev",
-          areas: ["frontend"],
-          description:
-            "Hi! My Name is Radoslav and i'm good at frontend. I Know HTML, CSS, JS, VueJS",
-          hourlyRate: 30,
-        },
-        {
-          id: "c2",
-          firstName: "Stoqn",
-          lastName: "Popov",
-          areas: ["backend", "career"],
-          description:
-            "I'm Stoqn and I've worked as a freelance web developer for years. Let me help you to became Backend Dev!",
-          hourlyRate: 15,
-        },
-        {
-          id: "c3",
-          firstName: "Maximilian",
-          lastName: "Schwarzmüller",
-          areas: ["frontend", "backend", "career"],
-          description:
-            "I'm Maximilian and I've worked as a freelance web developer for years. Let me help you become a developer as well!",
-          hourlyRate: 30,
-        },
-      ],
+      coaches: [],
     };
   },
 
@@ -43,7 +15,7 @@ export default {
       return state.coaches.length > 0;
     },
 
-    isCoach(state, getters, rootState, rootGetters) {
+    isCoach(_, getters, _2, rootGetters) {
       const coaches = getters.getCoaches;
       const userId = rootGetters.getUserId;
 
@@ -55,12 +27,17 @@ export default {
     addCoach(state, payload) {
       state.coaches.push(payload);
     },
+
+    setCoaches(state, payload){
+      state.coaches = payload
+    } 
   },
 
   actions: {
-    addCoach(context, payload) {
+    async addCoach(context, payload) {
+      const userId = context.rootGetters.getUserId
+
       const newCoach = {
-        id: "c4",
         firstName: payload.firstName,
         lastName: payload.lastName,
         areas: payload.areas,
@@ -68,7 +45,42 @@ export default {
         hourlyRate: payload.hourlyRate,
       };
 
-      context.commit("addCoach", newCoach);
+     const response = await fetch(`https://find-coach-my-version-default-rtdb.europe-west1.firebasedatabase.app/coaches/${userId}.json`,{
+        method: 'PUT',
+        body: JSON.stringify(newCoach)
+      })
+
+      if(!response.ok){
+        //error
+      }
+
+      context.commit("addCoach", {
+        ...newCoach,
+        id: userId
+      });
     },
+
+    async fetchCoaches(context){
+      const response = await fetch('https://find-coach-my-version-default-rtdb.europe-west1.firebasedatabase.app/coaches.json')
+
+      const responseData = await response.json()
+
+      const coaches = []
+
+      for(var key in responseData){
+        const coach = {
+          id: key,
+          firstName: responseData[key].firstName,
+          lastName: responseData[key].lastName,
+          areas: responseData[key].areas,
+          description: responseData[key].description,
+          hourlyRate: responseData[key].hourlyRate
+        } 
+
+        coaches.push(coach)
+      }
+
+      context.commit('setCoaches', coaches)
+    }
   },
 };
