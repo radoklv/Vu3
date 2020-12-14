@@ -1,4 +1,5 @@
 <template>
+  <base-spinner v-if="isLoading"></base-spinner>
   <base-card>
     <h2>Requests Page</h2>
     <h5 v-if="!haveRequests">There is No Requests!</h5>
@@ -7,6 +8,7 @@
         v-for="request in requests"
         :key="request.id"
         :request="request"
+        @deleting="deletingEvent($event)"
       ></request-item>
     </ul>
   </base-card>
@@ -18,14 +20,26 @@ export default {
   components: {
     RequestItem,
   },
+  data(){
+    return{
+      isLoading: false
+    }
+  },
 
   created(){
     this.loadRequests()
   },
 
   methods: {
+
     async loadRequests(){
-      await this.$store.dispatch('requests/fetchRequests')
+      this.isLoading = true;
+      await this.$store.dispatch('requests/fetchRequests');
+      this.isLoading = false;
+    },
+
+    deletingEvent(event){
+      this.isLoading = event
     }
   },
 

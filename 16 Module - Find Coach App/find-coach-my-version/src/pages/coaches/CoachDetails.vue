@@ -5,7 +5,7 @@
   </base-card>
 
   <base-card>
-    <h5>Iterested? Contact {{ fullName }} now!</h5>
+    <h5>Interested? Contact {{ fullName }} now!</h5>
     <base-button link :to="coachLink">Contact</base-button>
     <router-view></router-view>
   </base-card>

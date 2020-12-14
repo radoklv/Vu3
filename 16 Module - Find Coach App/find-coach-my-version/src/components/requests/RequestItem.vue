@@ -1,38 +1,42 @@
 <template>
   <li>
-      <base-card>
-        <h4>From: <a :href="mailTo">{{request.email}}</a></h4>
-        <p><span>Message: </span>{{request.message}}</p>
-        <base-button @click="deleteRequest">Delete</base-button>
-      </base-card>
+    <base-card>
+      <h4>
+        From: <a :href="mailTo">{{ request.email }}</a>
+      </h4>
+      <p><span>Message: </span>{{ request.message }}</p>
+      <base-button @click="deleteRequest">Delete</base-button>
+    </base-card>
   </li>
 </template>
 
 <script>
 export default {
-    props: ['request'],
+  emits: ["deleting"],
+  props: ["request"],
 
-    methods:{
-        deleteRequest(){
-
-            if(confirm('Do you Really wonna to Delete this Requstes?')){
-                this.$store.dispatch('requests/deleteRequest', this.request.id)
-            }else{
-                return
-            }
-        }
+  methods: {
+    async deleteRequest() {
+      if (confirm("Do you Really wonna to Delete this Requstes?")) {
+        this.$emit("deleting", true);
+        await this.$store.dispatch("requests/deleteRequest", this.request.id);
+        this.$emit("deleting", false);
+      } else {
+        return;
+      }
     },
+  },
 
-    computed:{
-        mailTo(){
-            return 'mailTo:'+this.request.email
-        }
-    }
+  computed: {
+    mailTo() {
+      return "mailTo:" + this.request.email;
+    },
+  },
 };
 </script>
 
 <style scoped>
-p > span{
-    font-weight: 600;
+p > span {
+  font-weight: 600;
 }
 </style>

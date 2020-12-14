@@ -1,4 +1,5 @@
 <template>
+  <base-spinner v-if="isLoading"></base-spinner>
   <base-card>
     <coaches-filter @updatedFilter="updateFilter"></coaches-filter>
   </base-card>
@@ -31,6 +32,8 @@ export default {
 
   data() {
     return {
+      isLoading: true,
+
       filter: {
         frontend: true,
         backend: true,
@@ -49,14 +52,14 @@ export default {
     },
 
     async loadCoaches(){
-      await this.$store.dispatch('coaches/fetchCoaches')
+      this.isLoading = true;
+      await this.$store.dispatch('coaches/fetchCoaches');
+      this.isLoading = false;
     }
   },
 
   computed: {
     coaches() {
-      // return this.$store.getters["coaches/getCoaches"];
-
       return this.$store.getters['coaches/getCoaches'].filter(coach =>{
         if(coach.areas.includes('frontend') && this.filter.frontend == true){
           return true

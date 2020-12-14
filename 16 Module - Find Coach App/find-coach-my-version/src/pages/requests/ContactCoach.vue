@@ -1,4 +1,5 @@
 <template>
+  <base-spinner v-if="isLoading"></base-spinner>
   <form @submit.prevent="addRequest" class="form">
     <div class="form-body">
       <div class="form-control" :class="{ invalid: !email.isValid }">
@@ -36,6 +37,8 @@ export default {
 
   data() {
     return {
+      isLoading: false,
+
       isFormValid: true,
 
       email: {
@@ -76,14 +79,15 @@ export default {
         return;
       }
 
-
       const reqData = {
         coachId: this.id,
         email: this.email,
         message: this.message,
       };
       
+      this.isLoading = true;
       this.$store.dispatch('requests/addRequests', reqData)
+      this.isLoading = false;
       this.$router.replace(`/coaches`)
     },
   },

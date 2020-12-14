@@ -1,4 +1,5 @@
 <template>
+  <base-spinner v-if="isLoading"></base-spinner>
   <base-card>
     <h2>Register as Coach</h2>
     <coach-form @formData="addCoach"></coach-form>
@@ -12,13 +13,20 @@ export default {
     CoachForm,
   },
 
-  methods: {
-      addCoach(coachData){
-          this.$store.dispatch('coaches/addCoach', coachData),
-          this.$router.replace('/')
-      }
+  data() {
+    return {
+      isLoading: false,
+    };
   },
 
+  methods: {
+    async addCoach(coachData) {
+      this.isLoading = true;
+      await this.$store.dispatch("coaches/addCoach", coachData);
+      this.isLoading = false;
+      this.$router.replace("/");
+    },
+  },
 };
 </script>
 

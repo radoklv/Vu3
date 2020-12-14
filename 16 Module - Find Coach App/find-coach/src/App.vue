@@ -33,6 +33,7 @@ html {
 body {
   margin: 0;
   background-color: rgb(221, 209, 209);
+  position: relative;
 }
 
 .cmp-enter-active{
