@@ -1,4 +1,5 @@
 <template>
+  <teleport to="body">
   <div class="base-spin">
     <div class="lds-ring">
       <div></div>
@@ -7,6 +8,7 @@
       <div></div>
     </div>
   </div>
+  </teleport>
 </template>
 
 <style scoped>

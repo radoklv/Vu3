@@ -2,6 +2,7 @@ export default {
   namespaced: true,
   state() {
     return {
+      lastFetch: null,
       coaches: [],
     };
   },
@@ -21,6 +22,17 @@ export default {
 
       return coaches.some(el => el.id === userId)
     },
+
+    shouldUpdate(state){
+      const lastTimestamp = state.lastFetch;
+      const newTImestamp =  Math.floor(Date.now() / 1000)
+
+      if(!lastTimestamp){
+        return true
+      }
+
+      return (newTImestamp - lastTimestamp) > 60 ? true : false;
+    }
   },
 
   mutations: {
@@ -30,7 +42,11 @@ export default {
 
     setCoaches(state, payload){
       state.coaches = payload
-    } 
+    },
+
+    setFetchTimestamp(state){
+      state.lastFetch = Math.floor(Date.now() / 1000)
+    }
   },
 
   actions: {
@@ -61,6 +77,11 @@ export default {
     },
 
     async fetchCoaches(context){
+
+      if(!context.getters.shouldUpdate){
+        return
+      }
+
       const response = await fetch('https://find-coach-my-version-default-rtdb.europe-west1.firebasedatabase.app/coaches.json')
 
       const responseData = await response.json()
@@ -81,6 +102,11 @@ export default {
       }
 
       context.commit('setCoaches', coaches)
+      context.commit('setFetchTimestamp')
+    },
+
+    setLastFetch(context){
+      context.commit('setLastFetch')
     }
   },
 };

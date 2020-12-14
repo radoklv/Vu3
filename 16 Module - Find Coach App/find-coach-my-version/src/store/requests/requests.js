@@ -2,6 +2,7 @@ export default {
   namespaced: true,
   state() {
     return {
+      lastFetch: null,
       requests: [],
     };
   },
@@ -16,6 +17,17 @@ export default {
     haveRequests(_, getters) {
       return getters.getRequests.length > 0;
     },
+
+    shouldFetch(state){
+      const lastTime = state.lastFetch;
+      const newTime = Math.floor(Date.now() / 1000)
+
+      if(!lastTime){
+        return true
+      }
+
+      return (newTime - lastTime) > 16? true : false;
+    }
   },
 
   mutations: {
@@ -25,6 +37,10 @@ export default {
 
     setRequests(state, payload){
         state.requests = payload
+    },
+
+    setLastFetchTimestamp(state){
+      state.lastFetch = Math.floor(Date.now() / 1000)
     }
   },
 
@@ -60,6 +76,11 @@ export default {
     },
 
     async fetchRequests(context) {
+
+      if(!context.getters.shouldFetch){
+        return
+      }
+
       const userId = context.rootGetters.getUserId;
 
       const response = await fetch(
@@ -86,6 +107,7 @@ export default {
       }
 
       context.commit('setRequests', responses)
+      context.commit('setLastFetchTimestamp')
     },
 
     async deleteRequest(context, requestsId){

@@ -1,5 +1,8 @@
 <template>
   <base-spinner v-if="isLoading"></base-spinner>
+  <!-- <base-card>
+    <p>Last Fetch: {{getLastFetch}}</p>
+  </base-card> -->
   <base-card>
     <coaches-filter @updatedFilter="updateFilter"></coaches-filter>
   </base-card>
@@ -42,39 +45,36 @@ export default {
     };
   },
 
-  created(){
-      this.loadCoaches()
+  created() {
+    this.loadCoaches();
   },
 
-  methods:{
-    updateFilter(newFilter){
-      this.filter = newFilter
-    },
+  methods: {
 
-    async loadCoaches(){
+    async loadCoaches() {
       this.isLoading = true;
-      await this.$store.dispatch('coaches/fetchCoaches');
+      await this.$store.dispatch("coaches/fetchCoaches");
       this.isLoading = false;
-    }
+    },
   },
 
   computed: {
     coaches() {
-      return this.$store.getters['coaches/getCoaches'].filter(coach =>{
-        if(coach.areas.includes('frontend') && this.filter.frontend == true){
-          return true
+      return this.$store.getters["coaches/getCoaches"].filter((coach) => {
+        if (coach.areas.includes("frontend") && this.filter.frontend == true) {
+          return true;
         }
 
-        if(coach.areas.includes('backend') && this.filter.backend == true){
-          return true
+        if (coach.areas.includes("backend") && this.filter.backend == true) {
+          return true;
         }
 
-        if(coach.areas.includes('career') && this.filter.career == true){
-          return true
+        if (coach.areas.includes("career") && this.filter.career == true) {
+          return true;
         }
 
-        return false
-      })
+        return false;
+      });
     },
 
     hasCoaches() {
