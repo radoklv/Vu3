@@ -42,7 +42,6 @@ export default {
             }
 
             this.filter = updatedFilter
-
             this.$emit('updatedFilter', this.filter)
         }
     }

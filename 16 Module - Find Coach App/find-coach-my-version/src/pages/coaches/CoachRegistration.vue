@@ -1,4 +1,7 @@
 <template>
+  <base-dialog title="Error" v-if="error">
+    {{error}}
+  </base-dialog>
   <base-spinner v-if="isLoading"></base-spinner>
   <base-card>
     <h2>Register as Coach</h2>
@@ -15,6 +18,7 @@ export default {
 
   data() {
     return {
+      error: null,
       isLoading: false,
     };
   },
@@ -22,7 +26,11 @@ export default {
   methods: {
     async addCoach(coachData) {
       this.isLoading = true;
-      await this.$store.dispatch("coaches/addCoach", coachData);
+      try{
+        await this.$store.dispatch("coaches/addCoach", coachData);
+      }catch(error){
+        this.error = error.message || "Failed to Add Coaches from Database"
+      }
       this.isLoading = false;
       this.$router.replace("/");
     },

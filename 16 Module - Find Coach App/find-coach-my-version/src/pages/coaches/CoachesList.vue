@@ -1,14 +1,14 @@
 <template>
   <base-spinner v-if="isLoading"></base-spinner>
-  <!-- <base-card>
-    <p>Last Fetch: {{getLastFetch}}</p>
-  </base-card> -->
+  <base-dialog title="Error" v-if="error" @close="closeDialog">
+    {{error}}
+  </base-dialog>
   <base-card>
-    <coaches-filter @updatedFilter="updateFilter"></coaches-filter>
+    <coaches-filter @updatedFilter="updateFilter($event)"></coaches-filter>
   </base-card>
   <base-card>
     <div class="actions">
-      <base-button mode="outline">Refresh</base-button>
+      <base-button mode="outline" @click="refreshList">Refresh</base-button>
       <base-button v-if="!isCoach" mode="outline" link to="/registration"
         >Register As Coach</base-button
       >
@@ -37,6 +37,8 @@ export default {
     return {
       isLoading: true,
 
+      error: null,
+
       filter: {
         frontend: true,
         backend: true,
@@ -50,12 +52,29 @@ export default {
   },
 
   methods: {
+    refreshList(){
+      this.$store.dispatch('resetTimestamp')
+      this.$store.dispatch('fetchCoaches')
+    },
+
+    updateFilter(newFilter){
+      this.filter = newFilter
+    },
 
     async loadCoaches() {
       this.isLoading = true;
-      await this.$store.dispatch("coaches/fetchCoaches");
+      try {
+         await this.$store.dispatch("coaches/fetchCoaches");
+      } catch (error) {
+        this.error = error.message
+      }
+     
       this.isLoading = false;
     },
+
+    closeDialog(){
+      this.error = null
+    }
   },
 
   computed: {

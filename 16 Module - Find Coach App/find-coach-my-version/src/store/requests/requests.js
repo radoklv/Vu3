@@ -84,11 +84,12 @@ export default {
       const userId = context.rootGetters.getUserId;
 
       const response = await fetch(
-        `https://find-coach-my-version-default-rtdb.europe-west1.firebasedatabase.app/requests/${userId}.json`
+        `https://find-coach-my-version-default-rtdb.europe-west1.firebasedatabase.app/requests/${userId}.jsson`
       );
 
       if(!response.ok){
-        //error
+       const error = new Error("Failed to fetch Requests from Database")
+       throw error
       }
 
       const responseData = await response.json()
