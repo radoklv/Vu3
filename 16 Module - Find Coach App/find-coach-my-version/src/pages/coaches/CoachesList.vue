@@ -1,27 +1,31 @@
 <template>
-  <base-spinner v-if="isLoading"></base-spinner>
-  <base-dialog title="Error" v-if="error" @close="closeDialog">
-    {{error}}
-  </base-dialog>
-  <base-card>
-    <coaches-filter @updatedFilter="updateFilter($event)"></coaches-filter>
-  </base-card>
-  <base-card>
-    <div class="actions">
-      <base-button mode="outline" @click="refreshList">Refresh</base-button>
-      <base-button v-if="!isCoach" mode="outline" link to="/registration"
-        >Register As Coach</base-button
-      >
-    </div>
-    <h2 v-if="!hasCoaches">There is no Coaches!</h2>
-    <ul v-else>
-      <coach-item
-        v-for="coach in coaches"
-        :key="coach.id"
-        :coach="coach"
-      ></coach-item>
-    </ul>
-  </base-card>
+  <div>
+    <base-dialog title="Error" :show="!!error" @close="closeDialog">
+      {{ error }}
+    </base-dialog>
+
+    <base-spinner v-if="isLoading && error != null"></base-spinner>
+
+    <base-card>
+      <coaches-filter @updatedFilter="updateFilter($event)"></coaches-filter>
+    </base-card>
+    <base-card>
+      <div class="actions">
+        <base-button mode="outline" @click="refreshList">Refresh</base-button>
+        <base-button v-if="!isCoach" mode="outline" link to="/registration"
+          >Register As Coach</base-button
+        >
+      </div>
+      <h2 v-if="!hasCoaches">There is no Coaches!</h2>
+      <ul v-else>
+        <coach-item
+          v-for="coach in coaches"
+          :key="coach.id"
+          :coach="coach"
+        ></coach-item>
+      </ul>
+    </base-card>
+  </div>
 </template>
 
 <script>
@@ -52,29 +56,29 @@ export default {
   },
 
   methods: {
-    refreshList(){
-      this.$store.dispatch('resetTimestamp')
-      this.$store.dispatch('fetchCoaches')
+    refreshList() {
+      this.$store.dispatch("resetTimestamp");
+      this.$store.dispatch("fetchCoaches");
     },
 
-    updateFilter(newFilter){
-      this.filter = newFilter
+    updateFilter(newFilter) {
+      this.filter = newFilter;
     },
 
     async loadCoaches() {
       this.isLoading = true;
       try {
-         await this.$store.dispatch("coaches/fetchCoaches");
+        await this.$store.dispatch("coaches/fetchCoaches");
       } catch (error) {
-        this.error = error.message
+        this.error = error.message;
       }
-     
+
       this.isLoading = false;
     },
 
-    closeDialog(){
-      this.error = null
-    }
+    closeDialog() {
+      this.error = null;
+    },
   },
 
   computed: {

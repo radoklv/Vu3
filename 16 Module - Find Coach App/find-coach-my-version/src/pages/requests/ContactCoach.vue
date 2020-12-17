@@ -1,34 +1,39 @@
 <template>
-  <base-spinner v-if="isLoading"></base-spinner>
-  <form @submit.prevent="addRequest" class="form">
-    <div class="form-body">
-      <div class="form-control" :class="{ invalid: !email.isValid }">
-        <label for="">Your Email</label>
-        <input
-          type="email"
-          id="email"
-          v-model.trim="email.val"
-          @change="clearValidity('email')"
-        />
+  <div>
+    <base-dialog title="Error" :show="!!error" @close="clearError">{{error}}</base-dialog>
+
+    <base-spinner v-if="isLoading && error != null"></base-spinner>
+
+    <form @submit.prevent="addRequest" class="form">
+      <div class="form-body">
+        <div class="form-control" :class="{ invalid: !email.isValid }">
+          <label for="">Your Email</label>
+          <input
+            type="email"
+            id="email"
+            v-model.trim="email.val"
+            @change="clearValidity('email')"
+          />
+        </div>
+
+        <div class="form-control" :class="{ invalid: !message.isValid }">
+          <label for="message">Your Message</label>
+          <textarea
+            name="message"
+            id="message"
+            rows="5"
+            v-model.trim="message.val"
+            @change="clearValidity('message')"
+          ></textarea>
+        </div>
       </div>
 
-      <div class="form-control" :class="{ invalid: !message.isValid }">
-        <label for="message">Your Message</label>
-        <textarea
-          name="message"
-          id="message"
-          rows="5"
-          v-model.trim="message.val"
-          @change="clearValidity('message')"
-        ></textarea>
+      <div class="form-action">
+        <h3 v-if="!isFormValid">There are empty fields!</h3>
+        <base-button mode="outline">Send</base-button>
       </div>
-    </div>
-
-    <div class="form-action">
-      <h3 v-if="!isFormValid">There are empty fields!</h3>
-      <base-button mode="outline">Send</base-button>
-    </div>
-  </form>
+    </form>
+  </div>
 </template>
 
 <script>
@@ -37,6 +42,8 @@ export default {
 
   data() {
     return {
+      error: null,
+
       isLoading: false,
 
       isFormValid: true,
@@ -54,6 +61,10 @@ export default {
   },
 
   methods: {
+    clearError(){
+      this.error = null
+    },
+
     clearValidity(input) {
       this[input].isValid = true;
     },
@@ -84,11 +95,16 @@ export default {
         email: this.email,
         message: this.message,
       };
-      
+
       this.isLoading = true;
-      this.$store.dispatch('requests/addRequests', reqData)
+      try{
+        this.$store.dispatch("requests/addRequests", reqData);
+      }catch(error){
+        this.error = error.message || "Failse to Add Request To Database";
+      }
+      
       this.isLoading = false;
-      this.$router.replace(`/coaches`)
+      this.$router.replace(`/coaches`);
     },
   },
 };

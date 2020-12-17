@@ -1,8 +1,12 @@
 <template>
   <the-header></the-header>
-    <div class="container">
-      <router-view></router-view>
-    </div>
+  <div class="container">
+    <router-view v-slot="slotProps">
+      <transition name="cmp" mode="out-in">
+        <component :is="slotProps.Component"></component>
+      </transition>
+    </router-view>
+  </div>
 </template>
 
 <script>
@@ -31,9 +35,34 @@ body {
   position: relative;
 }
 
-ul{
+ul {
   list-style: none;
   padding: 0;
-};
+}
 
+.cmp-enter-active {
+  animation: fade-in 0.2s ease-out;
+}
+
+.cmp-leave-active {
+  animation: fade-out 0.2s ease-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
 </style>

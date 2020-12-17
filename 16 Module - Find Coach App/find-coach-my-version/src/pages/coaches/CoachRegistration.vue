@@ -1,12 +1,14 @@
 <template>
-  <base-dialog title="Error" v-if="error">
-    {{error}}
-  </base-dialog>
-  <base-spinner v-if="isLoading"></base-spinner>
-  <base-card>
-    <h2>Register as Coach</h2>
-    <coach-form @formData="addCoach"></coach-form>
-  </base-card>
+  <div>
+    <base-dialog title="Error" :show="!!error" @close="clearError">
+      {{ error }}
+    </base-dialog>
+    <base-spinner v-if="isLoading && error != null"></base-spinner>
+    <base-card>
+      <h2>Register as Coach</h2>
+      <coach-form @formData="addCoach"></coach-form>
+    </base-card>
+  </div>
 </template>
 
 <script>
@@ -24,12 +26,16 @@ export default {
   },
 
   methods: {
+    clearError(){
+      this.error = null
+    },
+    
     async addCoach(coachData) {
       this.isLoading = true;
-      try{
+      try {
         await this.$store.dispatch("coaches/addCoach", coachData);
-      }catch(error){
-        this.error = error.message || "Failed to Add Coaches from Database"
+      } catch (error) {
+        this.error = error.message || "Failed to Add Coaches from Database";
       }
       this.isLoading = false;
       this.$router.replace("/");

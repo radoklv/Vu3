@@ -1,17 +1,24 @@
 <template>
-  <base-spinner v-if="isLoading"></base-spinner>
-  <base-card>
-    <h2>Requests Page</h2>
-    <h5 v-if="!haveRequests">There is No Requests!</h5>
-    <ul v-else>
-      <request-item
-        v-for="request in requests"
-        :key="request.id"
-        :request="request"
-        @deleting="deletingEvent($event)"
-      ></request-item>
-    </ul>
-  </base-card>
+  <div>
+    <base-dialog :show="!!error" title="Error" @close="clearError">
+      {{ error }}
+    </base-dialog>
+
+    <base-spinner v-if="isLoading && error != null"></base-spinner>
+
+    <base-card>
+      <h2>Requests Page</h2>
+      <h5 v-if="!haveRequests">There is No Requests!</h5>
+      <ul v-else>
+        <request-item
+          v-for="request in requests"
+          :key="request.id"
+          :request="request"
+          @deleting="deletingEvent($event)"
+        ></request-item>
+      </ul>
+    </base-card>
+  </div>
 </template>
 
 <script>
@@ -20,27 +27,36 @@ export default {
   components: {
     RequestItem,
   },
-  data(){
-    return{
-      isLoading: false
-    }
+  data() {
+    return {
+      isLoading: false,
+      error: null,
+    };
   },
 
-  created(){
-    this.loadRequests()
+  created() {
+    this.loadRequests();
   },
 
   methods: {
+    clearError() {
+      this.error = false;
+    },
 
-    async loadRequests(){
+    async loadRequests() {
       this.isLoading = true;
-      await this.$store.dispatch('requests/fetchRequests');
+      try {
+        await this.$store.dispatch("requests/fetchRequests");
+      } catch (error) {
+        this.error = error || "Failde to Fetch Requests";
+      }
+
       this.isLoading = false;
     },
 
-    deletingEvent(event){
-      this.isLoading = event
-    }
+    deletingEvent(event) {
+      this.isLoading = event;
+    },
   },
 
   computed: {

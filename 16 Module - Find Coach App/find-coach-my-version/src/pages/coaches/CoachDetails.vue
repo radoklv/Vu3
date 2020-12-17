@@ -1,23 +1,25 @@
 <template>
-  <base-card>
-    <h2>{{ fullName }}</h2>
-    <h4>{{ rate }}</h4>
-  </base-card>
+  <div>
+    <base-card>
+      <h2>{{ fullName }}</h2>
+      <h4>{{ rate }}</h4>
+    </base-card>
 
-  <base-card>
-    <h5>Interested? Contact {{ fullName }} now!</h5>
-    <base-button link :to="coachLink">Contact</base-button>
-    <router-view></router-view>
-  </base-card>
+    <base-card>
+      <h5>Interested? Contact {{ fullName }} now!</h5>
+      <base-button link :to="coachLink">Contact</base-button>
+      <router-view></router-view>
+    </base-card>
 
-  <base-card>
-    <base-badge
-      v-for="(area, index) in areas"
-      :key="index"
-      :area="area"
-    ></base-badge>
-    <p>{{ description }}</p>
-  </base-card>
+    <base-card>
+      <base-badge
+        v-for="(area, index) in areas"
+        :key="index"
+        :area="area"
+      ></base-badge>
+      <p>{{ description }}</p>
+    </base-card>
+  </div>
 </template>
 
 <script>

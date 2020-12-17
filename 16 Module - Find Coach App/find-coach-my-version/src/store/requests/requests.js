@@ -61,7 +61,8 @@ export default {
       );
 
       if (!response.ok) {
-        //error
+        const error = new Error("Failed to Add Request To Database")
+        throw error;
       }
 
       const responseData = await response.json();
@@ -84,7 +85,7 @@ export default {
       const userId = context.rootGetters.getUserId;
 
       const response = await fetch(
-        `https://find-coach-my-version-default-rtdb.europe-west1.firebasedatabase.app/requests/${userId}.jsson`
+        `https://find-coach-my-version-default-rtdb.europe-west1.firebasedatabase.app/requests/${userId}.json`
       );
 
       if(!response.ok){

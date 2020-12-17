@@ -30,7 +30,7 @@ export default {
   async loadRequests(context) {
     const userId = context.rootGetters.getUserId;
     const response = await fetch(
-      `https://find-coach-7860b.firebaseio.com/requests/${userId}.json`
+      `https://find-coach-7860b.firebaseio.com/requests/${userId}.jsson`
     );
 
     const responseData = await response.json();
