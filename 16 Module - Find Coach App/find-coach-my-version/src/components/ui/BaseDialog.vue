@@ -11,7 +11,7 @@
           <slot></slot>
         </div>
 
-        <div class="dialog-action">
+        <div class="dialog-action" v-if="!fixed">
           <base-button mode="outline" @click="closeDialog">Close</base-button>
         </div>
       </dialog>
@@ -34,6 +34,12 @@ export default {
       required: false,
       default: "Alert",
     },
+
+    fixed:{
+      type: Boolean,
+      required: false,
+      default: false
+    }
   },
 
   methods: {
@@ -46,7 +52,7 @@ export default {
 
 <style scoped>
 dialog {
-  position: fixed;
+  position: relative;
   z-index: 100;
   padding: 0;
   border-radius: 10px;

@@ -1,18 +1,44 @@
 <template>
   <header class="header">
-      <div class="header_logo">
-        <router-link to="/">Coach Finder by Rado</router-link>
-      </div>
+    <div class="header_logo">
+      <router-link to="/">Coach Finder by Rado</router-link>
+    </div>
 
-      <div class="header_nav">
+    <ul class="header_nav">
+      <li>
         <router-link to="/coaches">Coaches</router-link>
+      </li>
+
+      <li v-if="isLoggedIn">
         <router-link to="/requests">Requests</router-link>
-      </div>
+      </li>
+
+      <li v-else>
+        <router-link to="/auth">Login</router-link>
+      </li>
+
+      <li v-if="isLoggedIn">
+        <base-button mode="flat" @click="logout">Logout</base-button>
+      </li>
+    </ul>
   </header>
 </template>
 
 <script>
-export default {};
+export default {
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters.isAuthenticated;
+    },
+  },
+
+  methods:{
+    logout(){
+      this.$store.dispatch('logout')
+      this.$router.replace('/')
+    }
+  }
+};
 </script>
 
 <style scoped>
@@ -29,25 +55,32 @@ export default {};
   text-decoration: none;
 }
 
-.header_logo a{
-  font-size: 30px;
-  font-weight: 600;
-  color: #fff
+.header_nav{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
-.header_nav a{
+.header_logo a {
+  font-size: 30px;
+  font-weight: 600;
+  color: #fff;
+}
+
+
+.header_nav li a {
   padding: 7px 10px 10px;
   font-size: 25px;
   color: #fff;
   margin: 0 5px;
 }
-
+.header_nav li button{
+  font-size: 25px;
+}
 
 .header_nav a:hover,
-.header_nav a.active{
+.header_nav a.active {
   background-color: #018f08;
   border-radius: 10px;
 }
-
-
 </style>

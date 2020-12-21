@@ -35,7 +35,7 @@ export default {
       try {
         await this.$store.dispatch("coaches/addCoach", coachData);
       } catch (error) {
-        this.error = error.message || "Failed to Add Coaches from Database";
+        this.error = error.message;
       }
       this.isLoading = false;
       this.$router.replace("/");

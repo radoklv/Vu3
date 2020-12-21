@@ -8,6 +8,7 @@
 
     <base-card>
       <h2>Requests Page</h2>
+      <base-button mode="outline" @click="loadRequests(true)">Refresh</base-button>
       <h5 v-if="!haveRequests">There is No Requests!</h5>
       <ul v-else>
         <request-item
@@ -43,12 +44,12 @@ export default {
       this.error = false;
     },
 
-    async loadRequests() {
+    async loadRequests(refresh = false) {
       this.isLoading = true;
       try {
-        await this.$store.dispatch("requests/fetchRequests");
+        await this.$store.dispatch("requests/fetchRequests", {forceRefresh: refresh});
       } catch (error) {
-        this.error = error || "Failde to Fetch Requests";
+        this.error = error
       }
 
       this.isLoading = false;

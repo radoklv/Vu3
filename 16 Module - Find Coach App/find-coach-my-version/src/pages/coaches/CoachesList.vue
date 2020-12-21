@@ -11,8 +11,16 @@
     </base-card>
     <base-card>
       <div class="actions">
-        <base-button mode="outline" @click="refreshList">Refresh</base-button>
-        <base-button v-if="!isCoach" mode="outline" link to="/registration"
+        <base-button mode="outline" @click="loadCoaches(true)"
+          >Refresh</base-button
+        >
+        <base-button link to="/auth?redirect=registration" v-if="!isLoggedIn">Login and Register as a Coach</base-button>
+
+        <base-button
+          v-if="!isCoach && !isLoading && isLoggedIn"
+          mode="outline"
+          link
+          to="/registration"
           >Register As Coach</base-button
         >
       </div>
@@ -56,19 +64,16 @@ export default {
   },
 
   methods: {
-    refreshList() {
-      this.$store.dispatch("resetTimestamp");
-      this.$store.dispatch("fetchCoaches");
-    },
-
     updateFilter(newFilter) {
       this.filter = newFilter;
     },
 
-    async loadCoaches() {
+    async loadCoaches(refresh = false) {
       this.isLoading = true;
       try {
-        await this.$store.dispatch("coaches/fetchCoaches");
+        await this.$store.dispatch("coaches/fetchCoaches", {
+          forceRefresh: refresh,
+        });
       } catch (error) {
         this.error = error.message;
       }
@@ -82,6 +87,10 @@ export default {
   },
 
   computed: {
+    isLoggedIn() {
+      return this.$store.getters.isAuthenticated;
+    },
+
     coaches() {
       return this.$store.getters["coaches/getCoaches"].filter((coach) => {
         if (coach.areas.includes("frontend") && this.filter.frontend == true) {

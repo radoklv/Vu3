@@ -1,6 +1,6 @@
 <template>
   <div v-if="!link" >
-      <button  :class="mode">
+      <button :class="mode">
           <slot></slot>
       </button>
   </div>
@@ -56,16 +56,16 @@ a:active,
 button:hover,
 button:focus,
 button:active {
-  background-color: #270041;
-  color: #fff;
+  background-color: #ffffff;
+  color: #9900ff;
   border-color: #270041;
   outline: none;
 }
 
 .flat {
-  background-color: transparent;
+  background-color: transparent !important;
   color: #3a0061;
-  border: 1px solid #3a0061;
+  border: none;
 }
 
 .outline {
@@ -73,8 +73,6 @@ button:active {
   color: #fff;
 }
 
-.flat:hover,
-.flat:active,
 .outline:hover,
 .outline:active {
   outline: none;
