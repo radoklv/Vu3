@@ -221,5 +221,12 @@ export default {
     background-color: rgb(251, 173, 173);
 }
 
+@media only screen and (max-width: 500px) {
+
+.form-group label {
+  display: block;
+  margin: 0 0 10px 0; 
+}
+}
 
 </style>

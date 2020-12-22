@@ -14,7 +14,17 @@
         <base-button mode="outline" @click="loadCoaches(true)"
           >Refresh</base-button
         >
-        <base-button link to="/auth?redirect=registration" v-if="!isLoggedIn">Login and Register as a Coach</base-button>
+
+        <base-card>
+          <coach-search @emittedWord="updateSearchedWord"></coach-search>
+        </base-card>
+
+        <base-button
+          link
+          to="/auth?redirect=registration"
+          v-if="!isLoggedIn && !isLoading && !isCoach"
+          >Login and Register as a Coach</base-button
+        >
 
         <base-button
           v-if="!isCoach && !isLoading && isLoggedIn"
@@ -39,10 +49,12 @@
 <script>
 import CoachItem from "../../components/coaches/CoachItem";
 import CoachesFilter from "../../components/coaches/CoachesFilter";
+import CoachSearch from "../../components/coaches/CoachSearch";
 export default {
   components: {
     CoachItem,
     CoachesFilter,
+    CoachSearch,
   },
 
   data() {
@@ -56,6 +68,8 @@ export default {
         backend: true,
         career: true,
       },
+
+      searchedWord: "",
     };
   },
 
@@ -66,6 +80,14 @@ export default {
   methods: {
     updateFilter(newFilter) {
       this.filter = newFilter;
+    },
+
+    updateSearchedWord(newWord) {
+      this.searchedWord = newWord;
+    },
+
+    updatesearchedWord(word) {
+      this.searchedWord += word;
     },
 
     async loadCoaches(refresh = false) {
@@ -90,6 +112,17 @@ export default {
     isLoggedIn() {
       return this.$store.getters.isAuthenticated;
     },
+
+    // coaches() {
+    //   return this.$store.getters["coaches/getCoaches"].filter((coach) => {
+    //     const fullName = (coach.firstName + ' '+coach.lastName).toLowerCase()
+    //     if (fullName.includes(this.searchedWord.toLowerCase())) {
+    //       return true;
+    //     } else {
+    //       return false;
+    //     }
+    //   });
+    // },
 
     coaches() {
       return this.$store.getters["coaches/getCoaches"].filter((coach) => {
@@ -116,6 +149,7 @@ export default {
     isCoach() {
       return this.$store.getters["coaches/isCoach"];
     },
+
   },
 };
 </script>
@@ -125,5 +159,16 @@ export default {
   margin-bottom: 15px;
   display: flex;
   justify-content: space-between;
+}
+
+@media only screen and (max-width: 500px) {
+  .actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .actions .base-card {
+    margin-top: 15px;
+  }
 }
 </style>

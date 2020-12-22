@@ -1,10 +1,10 @@
 <template>
-  <header class="header">
-    <div class="header_logo">
+  <header class="header row">
+    <div class="header_logo col-12 col-md-6">
       <router-link to="/">Coach Finder by Rado</router-link>
     </div>
 
-    <ul class="header_nav">
+    <ul class="header_nav col-12 col-md-6">
       <li>
         <router-link to="/coaches">Coaches</router-link>
       </li>
@@ -82,5 +82,12 @@ export default {
 .header_nav a.active {
   background-color: #018f08;
   border-radius: 10px;
+}
+
+
+@media only screen and (max-width: 500px) {
+ .header_logo {
+   text-align: center;
+ }
 }
 </style>

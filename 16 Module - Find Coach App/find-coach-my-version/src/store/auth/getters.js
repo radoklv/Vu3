@@ -13,6 +13,10 @@ export default {
 
   isAuthenticated(state){
     return !!state.token
+  },
+
+  getDidAutoLogout(state){
+    return state.didAutoLogout
   }
 
 };

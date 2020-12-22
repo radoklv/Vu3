@@ -22,4 +22,6 @@ app.component('base-spinner', BaseSpinner)
 app.component('base-dialog', BaseDialog)
 
 
-app.mount('#app')
+router.isReady().then(function(){ //Това се прави с цел да се избегне първоначалната анимация на раутовете.
+    app.mount('#app');
+})

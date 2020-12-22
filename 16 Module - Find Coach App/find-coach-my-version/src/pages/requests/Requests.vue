@@ -73,6 +73,10 @@ export default {
 </script>
 
 <style scoped>
+ul{
+  margin: 10px 0;
+}
+
 p > span {
   font-weight: 600;
 }

@@ -11,7 +11,6 @@ export default {
     };
 
     const token = context.rootGetters.getToken;
-    console.log(token)
 
     const response = await fetch(
       `https://find-coach-my-version-default-rtdb.europe-west1.firebasedatabase.app/coaches/${userId}.json?auth=${token}`,

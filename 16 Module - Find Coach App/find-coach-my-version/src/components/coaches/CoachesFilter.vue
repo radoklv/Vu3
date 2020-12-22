@@ -1,16 +1,16 @@
 <template>
-  <div class="form-group">
-    <div class="form-control">
+  <div class="form-group row">
+    <div class="form-control col-12 col-md-4">
       <input type="checkbox" id="frontend" checked value="frontend" @change="changeFilter($event)"/>
       <label for="frontend">Frontend</label>
     </div>
 
-    <div class="form-control">
+    <div class="form-control col-12 col-md-4">
       <input type="checkbox" id="backend" checked value="backend"  @change="changeFilter($event)"/>
       <label for="backend">Backend</label>
     </div>
 
-    <div class="form-control">
+    <div class="form-control col-12 col-md-4">
       <input type="checkbox" id="career" checked value="career"  @change="changeFilter($event)"/>
       <label for="career">Career</label>
     </div>
