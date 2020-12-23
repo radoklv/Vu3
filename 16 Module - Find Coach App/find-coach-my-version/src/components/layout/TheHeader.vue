@@ -58,7 +58,7 @@ export default {
 .header_nav{
   display: flex;
   flex-direction: row;
-  align-items: center;
+  justify-content: flex-end;
 }
 
 .header_logo a {

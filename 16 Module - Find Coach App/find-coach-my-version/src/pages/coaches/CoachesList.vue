@@ -7,17 +7,17 @@
     <base-spinner v-if="isLoading && error != null"></base-spinner>
 
     <base-card>
-      <coaches-filter @updatedFilter="updateFilter($event)"></coaches-filter>
+      <coaches-filter @updatedFilter="updateFilter($event)" @emittedWord="updateSearchedWord($event)"></coaches-filter>
     </base-card>
     <base-card>
       <div class="actions">
         <base-button mode="outline" @click="loadCoaches(true)"
           >Refresh</base-button
         >
-
+<!-- 
         <base-card>
           <coach-search @emittedWord="updateSearchedWord"></coach-search>
-        </base-card>
+        </base-card> -->
 
         <base-button
           link
@@ -49,12 +49,12 @@
 <script>
 import CoachItem from "../../components/coaches/CoachItem";
 import CoachesFilter from "../../components/coaches/CoachesFilter";
-import CoachSearch from "../../components/coaches/CoachSearch";
+// import CoachSearch from "../../components/coaches/CoachSearch";
 export default {
   components: {
     CoachItem,
     CoachesFilter,
-    CoachSearch,
+    // CoachSearch,
   },
 
   data() {
@@ -83,6 +83,7 @@ export default {
     },
 
     updateSearchedWord(newWord) {
+      console.log(newWord)
       this.searchedWord = newWord;
     },
 
@@ -113,19 +114,10 @@ export default {
       return this.$store.getters.isAuthenticated;
     },
 
-    // coaches() {
-    //   return this.$store.getters["coaches/getCoaches"].filter((coach) => {
-    //     const fullName = (coach.firstName + ' '+coach.lastName).toLowerCase()
-    //     if (fullName.includes(this.searchedWord.toLowerCase())) {
-    //       return true;
-    //     } else {
-    //       return false;
-    //     }
-    //   });
-    // },
-
     coaches() {
-      return this.$store.getters["coaches/getCoaches"].filter((coach) => {
+      let coaches = this.$store.getters["coaches/getCoaches"]
+      
+      coaches = coaches.filter((coach) => {
         if (coach.areas.includes("frontend") && this.filter.frontend == true) {
           return true;
         }
@@ -140,6 +132,17 @@ export default {
 
         return false;
       });
+
+      coaches = coaches.filter((coach) => {
+        const fullName = (coach.firstName + ' '+coach.lastName).toLowerCase()
+        if (fullName.includes(this.searchedWord.toLowerCase())) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+
+      return coaches
     },
 
     hasCoaches() {
@@ -149,7 +152,6 @@ export default {
     isCoach() {
       return this.$store.getters["coaches/isCoach"];
     },
-
   },
 };
 </script>
