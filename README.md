@@ -1,3 +1,3 @@
 # Vu3
-Vue JS Course
+From Module 7 and above, firs run 'npm install' the 'npm run serve'
 
