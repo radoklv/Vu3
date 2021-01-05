@@ -1,2 +1,3 @@
 # Vu3
-Vue JS Projects
+Vue JS Course
+
