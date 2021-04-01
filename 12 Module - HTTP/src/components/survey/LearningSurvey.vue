@@ -67,7 +67,7 @@ export default {
           rating: this.choosenRating,
         };
 
-        fetch("https://vu3-backend.firebaseio.com/surveys.json", {
+        fetch("https://module---http-default-rtdb.firebaseio.com/surveys.json", {
           method: "POST",
           headers: {
             "Content-Type": "application.json",

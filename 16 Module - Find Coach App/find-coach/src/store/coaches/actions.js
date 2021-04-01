@@ -1,69 +1,75 @@
 export default {
   async addCoach(context, payload) {
     const userId = context.rootGetters.getUserId;
-    const coachData = {
+
+    const newCoach = {
       firstName: payload.firstName,
       lastName: payload.lastName,
-      description: payload.description,
       areas: payload.areas,
-      hourlyRate: payload.rate,
+      description: payload.description,
+      hourlyRate: payload.hourlyRate,
     };
 
+    const token = context.rootGetters.getToken;
+
     const response = await fetch(
-      `https://find-coach-7860b.firebaseio.com/coaches/${userId}.json`,
+      `https://find-coach-my-version-default-rtdb.europe-west1.firebasedatabase.app/coaches/${userId}.json?auth=${token}`,
       {
         method: "PUT",
-        body: JSON.stringify(coachData),
+        body: JSON.stringify(newCoach),
       }
     );
 
-    // const responseData = await reponse.json();
+    const responseData = response.json();
 
     if (!response.ok) {
-      //error
+      const error = new Error(
+        responseData.message || "Failed to Add Coach to Firebase!"
+      );
+      throw error;
     }
 
-
     context.commit("addCoach", {
-      ...coachData,
+      ...newCoach,
       id: userId,
     });
   },
 
-  async loadCoaches(context) {
-
-
-    if(!context.getters.shouldUpdate){
-      return
+  async fetchCoaches(context, payload) {
+    if (!payload.forceRefresh && !context.getters.shouldUpdate) {
+      return;
     }
 
     const response = await fetch(
-      "https://find-coach-7860b.firebaseio.com/coaches.json"
+      "https://find-coach-my-version-default-rtdb.europe-west1.firebasedatabase.app/coaches.json"
     );
 
     const responseData = await response.json();
 
-    if(!response.ok){
-      const error = new Error("Failed to Fetch")
-      throw error
+    if (!response.ok) {
+      const error = new Error(
+        responseData.message || "Failed to fetch Coaches from Firebase!"
+      );
+      throw error;
     }
 
     const coaches = [];
 
-    for (const key in responseData) {
+    console.table(responseData)
+    for (var key in responseData) {
       const coach = {
         id: key,
         firstName: responseData[key].firstName,
         lastName: responseData[key].lastName,
-        description: responseData[key].description,
         areas: responseData[key].areas,
+        description: responseData[key].description,
         hourlyRate: responseData[key].hourlyRate,
       };
 
-      coaches.push(coach)
+      coaches.push(coach);
     }
 
-    context.commit('setCoaches', coaches)
-    context.commit('setFetchTimestamp')
+    context.commit("setCoaches", coaches);
+    context.commit("setFetchTimestamp");
   },
 };

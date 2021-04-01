@@ -1,31 +1,32 @@
 <template>
   <teleport to="body">
-    <section class="spinner">
-      <div class="lds-ring">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    </section>
+  <div class="base-spin">
+    <div class="lds-ring">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
   </teleport>
 </template>
 
 <style scoped>
-.spinner{
-  position: absolute;
-  top: 50%;
-  left: 50%;
 
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
+.base-spin{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
 }
-
 .lds-ring {
   display: inline-block;
   position: relative;
   width: 80px;
   height: 80px;
+  background-color: rgba(0, 0, 0, 0.103);
+  border-radius: 50%;
 }
 .lds-ring div {
   box-sizing: border-box;
@@ -37,7 +38,7 @@
   border: 8px solid #fff;
   border-radius: 50%;
   animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  border-color: rgb(116, 116, 116) transparent transparent transparent;
+  border-color: #8d006e transparent transparent transparent;
 }
 .lds-ring div:nth-child(1) {
   animation-delay: -0.45s;

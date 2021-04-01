@@ -43,7 +43,7 @@ export default {
   methods: {
     fetchData() {
      
-      fetch("https://vu3-backend.firebaseio.com/surveys.json")
+      fetch("https://module---http-default-rtdb.firebaseio.com/surveys.json")
         .then((res) => {
           if (res.ok) {
             return res.json();

@@ -1,9 +1,13 @@
 export default {
-    addRequest(state, payload){
-        state.requests.push(payload)
-    },
+  addRequests(state, payload) {
+    state.requests.push(payload);
+  },
 
-    setRequests(state, payload){
-        state.requests = payload
-    }
-}
+  setRequests(state, payload) {
+    state.requests = payload;
+  },
+
+  setFetchTimestamp(state) {
+    state.lastFetch = Math.floor(Date.now() / 1000);
+  },
+};

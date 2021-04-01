@@ -1,21 +1,16 @@
 <template>
-  <div class="card">
+  <section class="base-card">
       <slot></slot>
-  </div>
+  </section>
 </template>
 
-<script>
-export default {
-
-}
-</script>
 
 <style scoped>
-.card {
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-  padding: 1rem;
-  margin: 2rem auto;
-  max-width: 40rem;
-}
+    .base-card{
+        box-shadow: 0 0 10px #000;
+        border-radius: 20px;
+        padding: 20px;
+        background-color: rgb(233, 251, 231);
+        margin: 0 0 15px;
+    }
 </style>

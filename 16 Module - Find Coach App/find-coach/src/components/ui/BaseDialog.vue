@@ -1,21 +1,19 @@
 <template>
   <teleport to="body">
-    <div v-if="show" @click="tryClose" class="backdrop"></div>
+    <div v-if="show" class="backdrop" @click="closeDialog"></div>
     <transition name="dialog">
       <dialog open v-if="show">
-        <header>
-          <slot name="header">
-            <h2>{{ title }}</h2>
-          </slot>
-        </header>
-        <section>
+        <div class="dialog-head">
+          <h2>{{ title }}</h2>
+        </div>
+
+        <div class="dialog-body">
           <slot></slot>
-        </section>
-        <menu v-if="!fixed">
-          <slot name="actions">
-            <base-button @click="tryClose">Close</base-button>
-          </slot>
-        </menu>
+        </div>
+
+        <div class="dialog-action" v-if="!fixed">
+          <base-button mode="outline" @click="closeDialog">Close</base-button>
+        </div>
       </dialog>
     </transition>
   </teleport>
@@ -23,27 +21,29 @@
 
 <script>
 export default {
+  emits: ["close"],
+
   props: {
-    show: {
+    show:{
       type: Boolean,
       required: true,
     },
+
     title: {
       type: String,
       required: false,
+      default: "Alert",
     },
-    fixed: {
+
+    fixed:{
       type: Boolean,
       required: false,
-      default: false,
-    },
+      default: false
+    }
   },
-  emits: ["close"],
+
   methods: {
-    tryClose() {
-      if (this.fixed) {
-        return;
-      }
+    closeDialog() {
       this.$emit("close");
     },
   },
@@ -51,85 +51,61 @@ export default {
 </script>
 
 <style scoped>
+dialog {
+  position: relative;
+  z-index: 100;
+  padding: 0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.dialog-head {
+  padding: 5px;
+  background-color: blueviolet;
+  text-align: center;
+  color: #fff;
+}
+
+.dialog-body {
+  padding: 20px;
+  text-align: center;
+}
+
 .backdrop {
-  position: fixed;
+  background-color: rgba(0, 0, 0, 0.349);
+  position: absolute;
   top: 0;
   left: 0;
+  width: 100vw;
   height: 100vh;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.75);
-  z-index: 10;
+  z-index: 50;
 }
 
-dialog {
-  position: fixed;
-  top: 20vh;
-  left: 10%;
-  width: 80%;
-  z-index: 100;
-  border-radius: 12px;
-  border: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-  padding: 0;
-  margin: 0;
-  overflow: hidden;
-  background-color: white;
-}
-
-header {
-  background-color: #3a0061;
-  color: white;
-  width: 100%;
-  padding: 1rem;
-}
-
-header h2 {
-  margin: 0;
-}
-
-section {
-  padding: 1rem;
-}
-
-menu {
-  padding: 1rem;
-  display: flex;
-  justify-content: flex-end;
-  margin: 0;
-}
-
-@media (min-width: 768px) {
-  dialog {
-    left: calc(50% - 20rem);
-    width: 40rem;
-  }
+.dialog-action {
+  text-align: center;
+  margin: 5px 0;
 }
 
 .dialog-enter-active{
-  animation: fade-in .2s ease-out;
+  animation: pop-in .2s ease-out
 }
 
 .dialog-leave-active{
-  animation: fade-out .2s ease-out;
+  animation:  pop-out .2s ease-out;
 }
 
-
-@keyframes fade-in {
+@keyframes pop-in {
   from{
-    opacity: 0;
     transform: scale(0);
   }to{
-    opacity: 1;
     transform: scale(1);
   }
 }
 
-@keyframes fade-out{
+@keyframes pop-out {
   from{
-    opacity: 1;
     transform: scale(1);
   }to{
-    opacity: 0;
     transform: scale(0);
   }
 }
