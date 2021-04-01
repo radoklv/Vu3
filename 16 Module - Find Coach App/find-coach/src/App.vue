@@ -1,6 +1,6 @@
 <template>
   <the-header></the-header>
-  <div class="container">
+  <div class="body">
     <router-view v-slot="slotProps">
       <transition name="cmp" mode="out-in">
         <component :is="slotProps.Component"></component>
@@ -11,28 +11,11 @@
 
 <script>
 import TheHeader from "./components/layout/TheHeader";
+
 export default {
   components: {
     TheHeader,
   },
-
-  created(){
-    this.$store.dispatch('autoLogin')
-  },
-
-  computed: {
-    didAutoLogout(){
-      return this.$store.getters.getDidAutoLogout
-    }
-  },
-
-  watch: {
-    didAutoLogout(currentVal, oldVal){
-      if(currentVal && currentVal !== oldVal){
-        this.$router.replace('/coaches')
-      }
-    }
-  }
 };
 </script>
 
@@ -44,43 +27,37 @@ export default {
 }
 
 html {
-  font-family: "Roboto", sans-serif;
+  font-family: "Roboto", sans-serif,;
 }
 
 body {
   margin: 0;
-  background-color: #4e4242;
+  background-color: rgb(221, 209, 209);
   position: relative;
 }
 
-ul {
-  list-style: none;
-  padding: 0;
+.cmp-enter-active{
+  animation: slide-in .5s ease-out;
 }
 
-.cmp-enter-active {
-  animation: fade-in 0.2s ease-out;
+.cmp-leave-active{
+  animation: slide-out .5s ease-out;
 }
 
-.cmp-leave-active {
-  animation: fade-out 0.2s ease-out;
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
+@keyframes slide-in {
+  from{
+    transform: translateY(-200%);
   }
-  to {
-    opacity: 1;
+  to{
+    transform: translateY(0);
   }
 }
 
-@keyframes fade-out {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
+@keyframes slide-out {
+  from{
+    transform: translateY(0%)
+  }to{
+    transform: translateY(-200%);
   }
 }
 </style>

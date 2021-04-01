@@ -1,44 +1,32 @@
 <template>
   <div>
-    <base-dialog title="Error" :show="!!error" @close="clearError">
-      {{ error }}
-    </base-dialog>
-    <base-spinner v-if="isLoading && error != null"></base-spinner>
     <base-card>
-      <h2>Register as Coach</h2>
-      <coach-form @formData="addCoach"></coach-form>
+      <h2>Register as a coach now</h2>
+      <coach-form @form-data="addNewData"></coach-form>
+      <base-spinner v-if="isLoading"></base-spinner>
     </base-card>
   </div>
 </template>
 
 <script>
-import CoachForm from "../../components/coaches/CoachForm";
+import CoachForm from "../../components/coach/CoachForm";
 export default {
-  components: {
-    CoachForm,
-  },
-
   data() {
     return {
-      error: null,
       isLoading: false,
     };
   },
 
+  components: {
+    CoachForm,
+  },
+
   methods: {
-    clearError(){
-      this.error = null
-    },
-    
-    async addCoach(coachData) {
+    async addNewData(data) {
       this.isLoading = true;
-      try {
-        await this.$store.dispatch("coaches/addCoach", coachData);
-      } catch (error) {
-        this.error = error.message;
-      }
+      await this.$store.dispatch("coaches/addCoach", data);
       this.isLoading = false;
-      this.$router.replace("/");
+      this.$router.replace("/coaches");
     },
   },
 };

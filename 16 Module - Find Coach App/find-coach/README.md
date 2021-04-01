@@ -1,4 +1,4 @@
-# find-coach-my-version
+# find-coach
 
 ## Project setup
 ```

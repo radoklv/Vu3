@@ -1,40 +1,27 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import Coaches from "./pages/coaches/CoachesList";
-import Requests from "./pages/requests/Requests";
-import CoachDetails from "./pages/coaches/CoachDetails";
+import NotFound from "./pages/NotFound";
+import CoachDeatail from "./pages/coaches/CoachDeatail";
+import CoachesList from "./pages/coaches/CoachesList";
 import CoachRegistration from "./pages/coaches/CoachRegistration";
+import RequestsRecieved from "./pages/requests/RequestsRecieved";
 import ContactCoach from "./pages/requests/ContactCoach";
-import UserAuth from "./pages/auth/UserAuth";
-import store from "./store/index";
 
 const router = createRouter({
   history: createWebHistory(),
-  linkActiveClass: "active",
-
   routes: [
     { path: "/", redirect: "/coaches" },
-    { path: "/coaches", component: Coaches },
+    { path: "/coaches", component: CoachesList },
     {
       path: "/coaches/:id",
-      component: CoachDetails,
+      component: CoachDeatail,
       props: true,
       children: [{ path: "contact", component: ContactCoach, props: true }],
-      meta: { requireAuth: true },
     },
-    { path: "/requests", component: Requests, meta: { requiresAuth: true } },
-    { path: "/auth", component: UserAuth, meta: { requiresUnauth: true } },
-    { path: "/registration", component: CoachRegistration },
+    { path: "/register", component: CoachRegistration },
+    { path: "/requests", component: RequestsRecieved },
+    { path: "/:notFound(.*)", component: NotFound },
   ],
 });
 
-router.beforeEach(function(to, _, next) {
-  if (to.meta.requiresAuth && !store.getters.isAuthenticated) {
-    next("/auth");
-  } else if (to.meta.requiresUnauth && store.getters.isAuthenticated) {
-    next("/coaches");
-  } else {
-    next();
-  }
-});
 export default router;

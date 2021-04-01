@@ -1,75 +1,69 @@
 export default {
   async addCoach(context, payload) {
     const userId = context.rootGetters.getUserId;
-
-    const newCoach = {
+    const coachData = {
       firstName: payload.firstName,
       lastName: payload.lastName,
-      areas: payload.areas,
       description: payload.description,
-      hourlyRate: payload.hourlyRate,
+      areas: payload.areas,
+      hourlyRate: payload.rate,
     };
 
-    const token = context.rootGetters.getToken;
-
     const response = await fetch(
-      `https://find-coach-my-version-default-rtdb.europe-west1.firebasedatabase.app/coaches/${userId}.json?auth=${token}`,
+      `https://find-coach-7860b.firebaseio.com/coaches/${userId}.json`,
       {
         method: "PUT",
-        body: JSON.stringify(newCoach),
+        body: JSON.stringify(coachData),
       }
     );
 
-    const responseData = response.json();
+    // const responseData = await reponse.json();
 
     if (!response.ok) {
-      const error = new Error(
-        responseData.message || "Failed to Add Coach to Firebase!"
-      );
-      throw error;
+      //error
     }
 
+
     context.commit("addCoach", {
-      ...newCoach,
+      ...coachData,
       id: userId,
     });
   },
 
-  async fetchCoaches(context, payload) {
-    if (!payload.forceRefresh && !context.getters.shouldUpdate) {
-      return;
+  async loadCoaches(context) {
+
+
+    if(!context.getters.shouldUpdate){
+      return
     }
 
     const response = await fetch(
-      "https://find-coach-my-version-default-rtdb.europe-west1.firebasedatabase.app/coaches.json"
+      "https://find-coach-7860b.firebaseio.com/coaches.json"
     );
 
     const responseData = await response.json();
 
-    if (!response.ok) {
-      const error = new Error(
-        responseData.message || "Failed to fetch Coaches from Firebase!"
-      );
-      throw error;
+    if(!response.ok){
+      const error = new Error("Failed to Fetch")
+      throw error
     }
 
     const coaches = [];
 
-    console.table(responseData)
-    for (var key in responseData) {
+    for (const key in responseData) {
       const coach = {
         id: key,
         firstName: responseData[key].firstName,
         lastName: responseData[key].lastName,
-        areas: responseData[key].areas,
         description: responseData[key].description,
+        areas: responseData[key].areas,
         hourlyRate: responseData[key].hourlyRate,
       };
 
-      coaches.push(coach);
+      coaches.push(coach)
     }
 
-    context.commit("setCoaches", coaches);
-    context.commit("setFetchTimestamp");
+    context.commit('setCoaches', coaches)
+    context.commit('setFetchTimestamp')
   },
 };

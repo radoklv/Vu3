@@ -1,17 +1,16 @@
-import getters from './getters'
-import mutations from './mutatuions'
-import actions from './actions'
+import getters from './getters.js'
+import mutations from './mutations.js'
+import actions from './action.js'
 
 export default{
+
     state(){
         return{
-            userId: null,
-            token: null,
-            didAutoLogout: false
+            userId: 'c3',
         }
     },
 
     getters,
     mutations,
-    actions,
+    actions
 }
