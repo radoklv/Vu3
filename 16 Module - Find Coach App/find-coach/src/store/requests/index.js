@@ -2,14 +2,16 @@ import getters from './getters'
 import mutations from './mutations'
 import actions from './actions'
 
-export default{
+export default {
     namespaced: true,
-    state(){
-        return{
-            requests: []
-        }
+    state() {
+      return {
+        lastFetch: null,
+        requests: [],
+      };
     },
+    
     getters,
     mutations,
-    actions
+    actions,
 }

@@ -1,44 +1,60 @@
 <template>
-    <li>
-        <div>
-            <a :href="mailTo">{{email}}</a>
-        </div>
-
-        <p>{{message}}</p>
-    </li>
+  <li>
+    <base-dialog :show="!!error" title="Error" @close="clearError">
+      {{ error }}
+    </base-dialog>
+    <base-card>
+      <h4>
+        From: <a :href="mailTo">{{ request.email }}</a>
+      </h4>
+      <p><span>Message: </span>{{ request.message }}</p>
+      <base-button @click="deleteRequest">Delete</base-button>
+    </base-card>
+  </li>
 </template>
 
 <script>
 export default {
-    props:['email', 'message'],
+  emits: ["deleting"],
+  props: ["request"],
 
-    computed:{
-        mailTo(){
-            return 'mailto:'+ this.email
+  data() {
+    return {
+      error: null,
+    };
+  },
+
+  methods: {
+    clearError() {
+      this.error = false;
+    },
+
+    async deleteRequest() {
+      if (confirm("Do you Really wonna to Delete this Requstes?")) {
+        this.$emit("deleting", true);
+        try {
+          await this.$store.dispatch("requests/deleteRequest", this.request.id);
+        } catch (error) {
+          this.error = error.message;
         }
-    }
-}
+
+        this.$emit("deleting", false);
+      } else {
+        return;
+      }
+    },
+  },
+
+  computed: {
+    mailTo() {
+      return "mailTo:" + this.request.email;
+    },
+  },
+};
 </script>
 
 <style scoped>
-li {
-  margin: 1rem 0;
-  border: 1px solid #ccc;
-  padding: 1rem;
-}
-
-a {
-  color: #3d008d;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-a:hover,
-a:active {
-  color: #8d007a;
-}
-
-p {
-  margin: 0.5rem 0 0 0;
+p > span {
+  font-weight: 600;
 }
 </style>

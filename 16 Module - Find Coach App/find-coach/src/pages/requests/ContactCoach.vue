@@ -1,26 +1,36 @@
 <template>
   <div>
-    <base-spinner v-if="isLoading"></base-spinner>
-    <base-dialog
-      title="There is an Error"
-      :show="!!error"
-      @close="clearError"
-      >{{ error }}</base-dialog
-    >
-    <form @submit.prevent="submitForm">
-      <div class="form-control">
-        <label for="email">Your Email</label>
-        <input type="email" id="email" v-model.trim="email" />
+    <base-dialog title="Error" :show="!!error" @close="clearError">{{error}}</base-dialog>
+
+    <base-spinner v-if="isLoading && error != null"></base-spinner>
+
+    <form @submit.prevent="addRequest" class="form">
+      <div class="form-body">
+        <div class="form-control" :class="{ invalid: !email.isValid }">
+          <label for="">Your Email</label>
+          <input
+            type="email"
+            id="email"
+            v-model.trim="email.val"
+            @change="clearValidity('email')"
+          />
+        </div>
+
+        <div class="form-control" :class="{ invalid: !message.isValid }">
+          <label for="message">Your Message</label>
+          <textarea
+            name="message"
+            id="message"
+            rows="5"
+            v-model.trim="message.val"
+            @change="clearValidity('message')"
+          ></textarea>
+        </div>
       </div>
 
-      <div class="form-control">
-        <label for="message">Message</label>
-        <textarea id="message" rows="5" v-model.trim="message"></textarea>
-      </div>
-
-      <div class="actions">
-        <base-button>Send Message</base-button>
-        <p v-if="!isFormValid">There are invalid fields!</p>
+      <div class="form-action">
+        <h3 v-if="!isFormValid">There are empty fields!</h3>
+        <base-button mode="outline">Send</base-button>
       </div>
     </form>
   </div>
@@ -32,91 +42,110 @@ export default {
 
   data() {
     return {
-      isLoading: false,
-      email: "",
-      message: "",
-      isFormValid: true,
       error: null,
+
+      isLoading: false,
+
+      isFormValid: true,
+
+      email: {
+        val: "",
+        isValid: true,
+      },
+
+      message: {
+        val: "",
+        isValid: true,
+      },
     };
   },
 
   methods: {
-    async submitForm() {
+    clearError(){
+      this.error = null
+    },
+
+    clearValidity(input) {
+      this[input].isValid = true;
+    },
+
+    validateForm() {
+      this.email.isValid = true;
+      this.message.isValid = true;
       this.isFormValid = true;
 
-      if (this.email == "" || !this.email.includes("@") || this.message == "") {
-        this.isFormValid = false;
+      if (this.email.val == "") {
+        (this.email.isValid = false), (this.isFormValid = false);
+      }
+
+      if (this.message.val == "") {
+        (this.message.isValid = false), (this.isFormValid = false);
+      }
+    },
+
+    addRequest() {
+      this.validateForm();
+
+      if (!this.isFormValid) {
         return;
       }
 
-      const formData = {
+      const reqData = {
         coachId: this.id,
         email: this.email,
         message: this.message,
       };
 
       this.isLoading = true;
-      try {
-        await this.$store.dispatch("requests/addRequest", formData);
-      } catch (error) {
-        this.error = error.message;
+      try{
+        this.$store.dispatch("requests/addRequests", reqData);
+      }catch(error){
+        this.error = error.message || "Failse to Add Request To Database";
       }
+      
       this.isLoading = false;
-
-      if (this.error) {
-        return;
-      } else {
-        this.$router.replace("/coaches");
-      }
-    },
-
-    clearError() {
-      this.error = null;
+      this.$router.replace(`/coaches`);
     },
   },
 };
 </script>
 
 <style scoped>
-form {
-  margin: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  padding: 1rem;
+.form {
+  margin: 15px;
+}
+.form-body {
+  margin-bottom: 15px;
 }
 
-.form-control {
-  margin: 0.5rem 0;
+.form-action {
+  text-align: center;
 }
 
-label {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  display: block;
-}
-
-input,
-textarea {
-  display: block;
-  width: 100%;
-  font: inherit;
-  border: 1px solid #ccc;
-  padding: 0.15rem;
-}
-
-input:focus,
-textarea:focus {
-  border-color: #3d008d;
-  background-color: #faf6ff;
-  outline: none;
-}
-
-.errors {
-  font-weight: bold;
+.form-action h3 {
   color: red;
 }
 
-.actions {
-  text-align: center;
+.form-control {
+  height: auto;
+  margin-bottom: 15px;
+}
+
+.form-control label {
+  display: block;
+  font-weight: 600;
+}
+
+.form-control textarea {
+  width: 100%;
+}
+
+.invalid label {
+  color: red;
+}
+
+.invalid input,
+.invalid textarea {
+  background-color: rgb(255, 198, 198);
 }
 </style>

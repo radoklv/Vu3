@@ -1,5 +1,5 @@
 {
-  "name": "find-coach",
+  "name": "find-coach-my-version",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,8 +10,8 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "vue": "^3.0.0",
-    "vue-router": "^4.0.0-rc.3",
-    "vuex": "^4.0.0-rc.1"
+    "vue-router": "^4.0.0-rc.6",
+    "vuex": "^4.0.0-rc.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
